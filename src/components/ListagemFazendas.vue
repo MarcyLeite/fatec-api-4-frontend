@@ -27,13 +27,23 @@
         <p v-else class="fazendas-empty-message">Nenhuma Fazenda cadastrada</p>
         
         <div class="pagina-container">
-            <button @click="paginaAnterior" :disabled="paginaAtual === 1" class="btn-paginacao"> &lt; - </button>
-            <span class="contador-pagina"> Página {{ paginaAtual }} de {{ totalPaginas }} </span>
-            <button @click="proximaPagina" :disabled="paginaAtual === totalPaginas" class="btn-paginacao"> - &gt; </button>
-        </div>
-        
-        <button @click="adicionarFazenda(fazenda)" class="btn-nova-fazenda">Cadastrar Nova Fazenda</button>
+            <div class="dropdown-pagina">
+                <button class="btn-dropdown" @click="mostrarPaginas = !mostrarPaginas">
+                    {{ totalPaginas }} ▼
+                </button>
+
+                <ul v-if="mostrarPaginas" class="dropdown-menu">
+                    <li v-for="pagina in todasPaginas" :key="pagina" @click="mudarPagina(pagina)" :class="{ 'active': pagina === paginaAtual}">
+                        {{ pagina }}
+                    </li>
+                </ul>
+            </div>
+            <span class="contador-pagina"> {{ paginaAtual }} - {{ totalPaginas }} </span>
+            <button @click="paginaAnterior" :disabled="paginaAtual === 1" class="btn-paginacao"> &lt; </button>
+            <button @click="proximaPagina" :disabled="paginaAtual === totalPaginas" class="btn-paginacao"> &gt; </button>
+        </div>    
     </div>
+    <button @click="adicionarFazenda(fazenda)" class="btn-nova-fazenda">Cadastrar Nova Fazenda</button>
 </div>
 </template>
 
@@ -46,6 +56,7 @@ export default {
         return {
             paginaAtual: 1,
             itensPorPagina: 5,
+            mostrarPaginas: false,
             
             // Fazenda mockada
             fazendas: [
@@ -74,9 +85,21 @@ export default {
 
         totalPaginas() {
             return Math.ceil(this.fazendas.length / this.itensPorPagina);
+        },
+
+        todasPaginas() {
+            return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
         }
     },
+
     methods: {
+        mudarPagina(pagina) {
+            if (pagina >= 1 && pagina <= this.totalPaginas) {
+                this.paginaAtual = pagina;
+                this.mostrarPaginas = false;
+            }
+        },
+
         adicionarFazenda(fazenda) {
             console.log("Fazenda adicionada", fazenda);
         },
