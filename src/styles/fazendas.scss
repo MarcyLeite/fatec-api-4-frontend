@@ -80,7 +80,7 @@
         font-style: italic;
     }
 
-    .paginacao {
+    .pagina-container {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -88,19 +88,19 @@
         margin-top: 20px;
 
         .btn-paginacao {
-            background-color: #6c757d;
-            color: rgb(0, 0, 0);
+            background-color: beige;
+            color: rgb(71, 71, 71);
             border: none;
             padding: 5px 10px;
             border-radius: 4px;
             cursor: pointer;
 
             &:hover:not(:disabled) {
-                background-color: #000000;
+                background-color: beige;
             }
 
             &:disabled {
-                background-color: #050505;
+                background-color: beige;
                 cursor: not-allowed;
             }
         }
