@@ -1,57 +1,71 @@
 .fazenda-tela {
-    background-color: beige;
-    margin: 0; 
+    background-color: rgb(235, 224, 240);
+    margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center; 
-    min-height: 100vh; 
-
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
 
 .fazendas-titulo {
     color: #333;
-    margin-bottom: 20px; 
-    font-weight: 300; 
-    font-size: xx-large;
-    align-self: flex-start; 
+    margin-bottom: 20px;
+    margin-left: 235px;
+    font-weight: 400;
+    font-size: 60px;
+    align-self: flex-start;
+}
+
+.btn-nova-fazenda {
+    background-color: #801e62;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: 1160px;
+
+    &:hover {
+        background-color: #340e3b;
+    }
 }
 
 .fazendas-container {
-    background-color: beige;
-    border: 1px solid #000000;
+    background-color: rgb(235, 224, 240);
+    border: 1px solid black;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     font-family: Arial, sans-serif;
     width: 75%;
-    margin: 0 auto; 
     display: flex;
     flex-direction: column;
-    align-items: center; 
-    justify-content: flex-start;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    align-items: center;
+    margin: 20px auto;
 
     .fazendas-table {
-        width: 100%;
+        width: 103%;
         border-collapse: collapse;
         margin-bottom: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
         .fazendas-table-header {
-            background-color: beige;
+            background-color: rgb(235, 224, 240);
 
             .fazendas-header {
                 padding: 10px;
                 text-align: left;
-                border-bottom: 2px solid #e9ecf0;
+                border-bottom: 2px solid rgb(78, 78, 78);
                 color: black;
             }
         }
 
         .fazendas-table-body {
             .fazendas-table-row {
-                border-bottom: 1px solid #e5dee6;
+                border-bottom: 1px solid rgb(78, 78, 78);
+                
 
                 .fazendas-cell {
                     padding: 10px;
@@ -79,48 +93,84 @@
         color: #666;
         font-style: italic;
     }
+}
 
-    .pagina-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px; 
-        margin-top: 20px;
+.dropdown-pagina {
+    position: relative;
+    margin-right: 30px;
+    gap: 50px;
+    
+    .btn-dropdown {
+        background-color: rgb(235, 224, 240);
+        color: rgb(0, 0, 0);
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .dropdown-menu {
+        position: absolute;
+        top: 35px;
+        left: 0;
+        background: rgb(235, 224, 240);
+        color: #000000;
+        border: 1px solid #000000;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        list-style: none;
+        padding: 0;
+        width: 60px;
+    }
+    
+    .dropdown-menu li {
+        padding: 8px;
+        cursor: pointer;
+    text-align: center;
+  }
+  
+  .dropdown-menu li:hover {
+      background-color: rgb(181, 153, 194);
+    }
+    
+    .dropdown-menu .active {
+        background-color: rgb(235, 224, 240);
+        color: rgb(0, 0, 0);
+    }
+}
 
-        .btn-paginacao {
-            background-color: beige;
-            color: rgb(71, 71, 71);
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
+.pagina-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-left: 1150px;
+    gap: 20px;
 
-            &:hover:not(:disabled) {
-                background-color: beige;
-            }
+    .btn-paginacao {
+        background-color: rgb(235, 224, 240);
+        color: rgb(71, 71, 71);
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        margin: 0 10px;
+        cursor: pointer;
+        transition: opacity 0.3s ease-in-out;
 
-            &:disabled {
-                background-color: beige;
-                cursor: not-allowed;
-            }
+        &:hover:not(:disabled) {
+            background-color: rgb(235, 224, 240);
         }
 
-        .contador-pagina {
-            font-size: 14px;
-            color: #333;
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
     }
 
-    .btn-nova-fazenda {
-        background-color: #801e62;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-
-        &:hover {
-            background-color: #340e3b;
-        }
+    .contador-pagina {
+        font-size: 14px;
+        color: #333;
+        align-content: end;
+        
     }
 }
