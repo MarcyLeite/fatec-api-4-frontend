@@ -1,7 +1,7 @@
 <template>
     <div class="fazenda-tela">
         <h2 class="fazendas-titulo">Fazendas</h2>
-        <div class="fazendas-container">
+        <v-container class="fazendas-container">
             <table v-if="paginaFazenda.length > 0" class="fazendas-table">
                 <thead class="fazendas-table-header">
                     <tr>
@@ -19,7 +19,7 @@
                     <td class="fazendas-cell">{{ fazenda.fazProdAnual }}</td>
                     <td class="fazendas-cell">{{ fazenda.fazTipoSolo }}</td>
                     <td class="fazendas-cell">
-                        <button @click="editarFazenda(fazenda)" class="btn-edicao-fazenda">Editar</button>
+                        <v-btn @click="editarFazenda(fazenda)" class="btn-edicao-fazenda">Editar</v-btn>
                     </td>
                 </tr>
             </tbody>
@@ -28,23 +28,24 @@
         
         <div class="pagina-container">
             <div class="dropdown-pagina">
-                <span class="btn-dropdown" @click="mostrarPaginas = !mostrarPaginas">
+                <v-btn class="btn-dropdown" @click="mostrarPaginas = !mostrarPaginas">
                     <span>{{ paginaAtual }}</span> 
                     <span class="seta-dropdown"> ▼ </span>
-                </span>
-
-                <ul v-if="mostrarPaginas" class="dropdown-menu">
-                    <li v-for="pagina in todasPaginas" :key="pagina" @click="mudarPagina(pagina)" :class="{ 'active': pagina === paginaAtual}">
+                </v-btn>
+                
+                <v-list v-if="mostrarPaginas" class="dropdown-menu">
+                    <v-list-item v-for="pagina in todasPaginas" :key="pagina" @click="mudarPagina(pagina)" :class="{ 'active': pagina === paginaAtual}">
                         {{ pagina }}
-                    </li>
-                </ul>
+                    </v-list-item>
+                </v-list>
             </div>
             <span class="contador-pagina"> {{ paginaAtual }} - {{ totalPaginas }} </span>
             <button @click="paginaAnterior" :disabled="paginaAtual === 1" class="btn-paginacao"> &lt; </button>
             <button @click="proximaPagina" :disabled="paginaAtual === totalPaginas" class="btn-paginacao"> &gt; </button>
         </div>    
-    </div>
-    <button @click="adicionarFazenda(fazenda)" class="btn-nova-fazenda">Cadastrar Nova Fazenda</button>
+    </v-container>
+    <v-btn @click="adicionarFazenda(fazenda)" class="btn-nova-fazenda">Cadastrar Nova Fazenda</v-btn>
+    <p class="n-pagina">N° de Páginas</p>
 </div>
 </template>
 
