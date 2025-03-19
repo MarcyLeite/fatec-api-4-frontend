@@ -28,9 +28,10 @@
         
         <div class="pagina-container">
             <div class="dropdown-pagina">
-                <button class="btn-dropdown" @click="mostrarPaginas = !mostrarPaginas">
-                    {{ totalPaginas }} ▼
-                </button>
+                <span class="btn-dropdown" @click="mostrarPaginas = !mostrarPaginas">
+                    <span>{{ paginaAtual }}</span> 
+                    <span class="seta-dropdown"> ▼ </span>
+                </span>
 
                 <ul v-if="mostrarPaginas" class="dropdown-menu">
                     <li v-for="pagina in todasPaginas" :key="pagina" @click="mudarPagina(pagina)" :class="{ 'active': pagina === paginaAtual}">
@@ -72,6 +73,7 @@ export default {
                 { id: 10, fazNome: "Fazenda Vale Feliz", fazArea: 110, fazProdAnual: 5000, fazTipoSolo: "Argiloso" },
                 { id: 11, fazNome: "Fazenda Terra Fértil", fazArea: 140, fazProdAnual: 6500, fazTipoSolo: "Arenoso" },
                 { id: 12, fazNome: "Fazenda Céu Aberto", fazArea: 160, fazProdAnual: 7000, fazTipoSolo: "Misto" },
+
             ]
         };
     },

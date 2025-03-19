@@ -141,7 +141,9 @@
 
 .pagina-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    width: 300px;
+    margin-right: 75px;
     align-items: center;
     gap: 10px;
     margin-left: 1150px;
