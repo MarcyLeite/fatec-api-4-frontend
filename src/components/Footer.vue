@@ -9,11 +9,7 @@
     </v-footer>
 </template>
 
-<script>
-export default {
-    name: 'FooterComponent',
-}
-</script>
+<script setup lang="ts"></script>
 
 <style scoped>
 .v-footer {

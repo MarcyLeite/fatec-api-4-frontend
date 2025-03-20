@@ -24,15 +24,8 @@
     </v-navigation-drawer>
 </template>
 
-<script>
-export default {
-    name: 'Navbar',
-    data() {
-        return {
-            drawer: false,
-        };
-    },
-};
+<script setup lang="ts">
+const drawer = ref(false)
 </script>
 
 <style scoped>
