@@ -1,7 +1,11 @@
 <template>
-    <div>
-        <h1>Fazendas</h1>
+    <div class="bg-deep-purple-lighten-5 h-100">
+        <v-responsive
+      class="align-centerfill-height mx-auto "
+      max-width="900"
+    >
         <ListagemFazendas :fazendas = "fazendas" />
+        </v-responsive>
     </div>
 </template>
 
@@ -12,14 +16,6 @@ export default {
     components: {
         ListagemFazendas
     },
-    data() {
-        return {
-            fazendas: [
-                { id: 1, fazNome: 'Fazenda A', fazArea: 100, fazProdAnual: 500, fazTipoSolo: 'Argiloso' },
-                { id: 2, fazNome: 'Fazenda B', fazArea: 200, fazProdAnual: 700, fazTipoSolo: 'Arenoso' }
-            ]
-        }
-    }
 }
 
 </script>

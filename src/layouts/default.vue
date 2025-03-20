@@ -1,15 +1,14 @@
 <template>
-  <v-main>
-    <Navbar />
+  <div class="d-flex flex-column h-100">
+  <Navbar />
+  <v-main class="flex-grow-1">
     <router-view />
-    <Footer />
   </v-main>
-
+  <Footer  class="flex-grow-0"/>
+</div>
 </template>
 
 <script lang="ts" setup>
-import Navbar from '../components/Navbar.vue';
-import Footer from '../components/Footer.vue';
 
   //
 </script>
