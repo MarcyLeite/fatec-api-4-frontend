@@ -29,51 +29,54 @@
   import axios from 'axios';
   
   const headers = ref([
-    { title: "Fazenda", key: "fazNome" },
-    { title: "Área", key: "fazArea", align: "end" },
-    { title: "Produção Anual", key: "fazProdAnual", align: "end" },
-    { title: "Tipo de Solo", key: "fazTipoSolo" },
+    { title: "Fazenda", key: "nome" },
+    { title: "Área", key: "area", align: "end" },
+    { title: "Produção Anual", key: "prodAnual", align: "end" },
+    { title: "Tipo de Solo", key: "tipoSolo" },
     { title: "Edição", key: "edicao", sortable: false }
   ]);
   
   const fazendas = ref([]);
   const itensPorPagina = ref(5);
   const paginaFazenda = ref([]);
+  const totalFazendas = ref(0);
   const loading = ref(true);
-  const totalFazendas = ref(fazendas.value.length);
 
-  methods: {
-    const buscarFazenda = async () => {
-      try {
-       const response = await axios.get('http://localhost:3000/fazenda/listar')
-        .then(response => {
-          this.fazendas = response.data;
-          console.log(this.fazendas[0]);
-        })
-      } catch(error) {
-          console.error('Erro ao buscar fazendas: ', error);
-        };
-    }
+  async function buscarFazenda(page = 0, size = 5) {
+    loading.value = true;
     
-    function carregarFazendas({ page, itemsPerPage }) {
-      loading.value = true;
-      setTimeout(() => {
-        const inicio = (page - 1) * itemsPerPage;
-        const fim = inicio + itemsPerPage;
-        paginaFazenda.value = fazendas.value.slice(inicio, fim);
-        loading.value = false;
-      }, 500);
-    }
-    
-    function adicionarFazenda() {
-      console.log("Fazenda adicionada");
-    }
-    
-    function editarFazenda(item) {
-      console.log("Editando fazenda", item);
-    }
+    try {
+      const response = await axios.get('http://localhost:8080/fazenda/listar/{page}/{quantity}')
 
-    onMounted(buscarFazenda);
-  }
+      fazendas.value = response.data.content;
+      totalFazendas.value = response.data.totalElements || 0;
+
+      carregarFazendas({ page: 1, itemsPerPage: size });
+        } catch (error) {
+          console.error('Erro ao buscar fazendas:', error);
+        } finally {
+          loading.value = false;
+      }
+}
+
+function carregarFazendas({ page, itemsPerPage }) {
+  loading.value = true;
+  setTimeout(() => {
+    const inicio = (page - 1) * itemsPerPage;
+    const fim = inicio + itemsPerPage;
+    paginaFazenda.value = fazendas.value.slice(inicio, fim);
+    loading.value = false;
+  }, 500);
+}
+
+function adicionarFazenda() {
+  console.log("Fazenda adicionada");
+}
+
+function editarFazenda(item) {
+  console.log("Editando fazenda", item);
+}
+
+onMounted(() => buscarFazenda());
 
 </script>
