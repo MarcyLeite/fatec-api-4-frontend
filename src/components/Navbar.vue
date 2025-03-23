@@ -20,6 +20,11 @@
                     <v-list-item-title>Home</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
+            <v-list-item link href="/fazenda">
+                <v-list-content>
+                    <v-list-item-title>Fazenda</v-list-item-title>
+                </v-list-content>
+            </v-list-item>
         </v-list>
     </v-navigation-drawer>
 </template>
