@@ -14,5 +14,6 @@ declare module 'vue' {
     Navbar: typeof import('./components/Navbar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TerravisionMap: typeof import('./components/TerravisionMap.vue')['default']
   }
 }
