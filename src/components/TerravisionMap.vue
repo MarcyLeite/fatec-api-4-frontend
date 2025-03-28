@@ -1,10 +1,6 @@
 <template>
 	<div class="w-100 h-100">
-		<l-map ref="map" v-model:zoom="zoom" :center="[ centerX, centerY ]" :use-global-leaflet="false" @click="(e: any) => {
-			const point = e.latlng
-
-			centerX = point.lat
-			centerY = point.lng
+		<l-map ref="map" v-model:zoom="zoom" :center="center" :use-global-leaflet="false" @click="(e: any) => {
 		}">
 			<l-tile-layer
 				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -80,11 +76,16 @@ import { LMap, LTileLayer, LPolygon, LTooltip } from "@vue-leaflet/vue-leaflet"
 const zoom = ref(6)
 
 const geojson = defineModel<any>()
-const centerX = ref(0)
-const centerY = ref(0)
+const center = ref<[number, number]>([0, 0])
 
 watch(geojson, () => {
-	
+	const point = geojson.value.features[0].geometry.coordinates[0][0][0]
+	const latlng = new LatLng(point[1], point[0])
+	center.value = [latlng.lat, latlng.lng]
+
+	setTimeout(() => {
+		zoom.value = 14
+	}, 10)
 })
 
 </script>
