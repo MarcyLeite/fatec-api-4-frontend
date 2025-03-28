@@ -1,11 +1,11 @@
 <template>
-    <v-footer color="deep-purple-lighten-4">
-        <v-col class="text-center d-flex align-center justify-center">
+    <v-footer color="deep-purple-lighten-4 d-flex justify-center">
+        <div>
             <v-icon class="mr-3">
                 <img src="@/assets/logo-aldebaram.svg" alt="Icon" class="icon-size">
             </v-icon>
-            <span>&copy; {{ new Date().getFullYear() }} Terravision by Aldebaram</span>
-        </v-col>
+            <span>&copy; {{ new Date().getFullYear() }} Terravision by Aldebaran</span>
+        </div>
     </v-footer>
 </template>
 
