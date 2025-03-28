@@ -1,14 +1,11 @@
 <template>
-  <div class="d-flex flex-column h-100">
   <Navbar />
-  <v-main class="flex-grow-1">
+  <v-main>
     <router-view />
   </v-main>
-  <Footer  class="flex-grow-0"/>
-</div>
+  <Footer />
 </template>
 
 <script lang="ts" setup>
 
-  //
 </script>
