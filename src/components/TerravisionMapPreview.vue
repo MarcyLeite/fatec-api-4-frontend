@@ -8,18 +8,19 @@
 				name="OpenStreetMap"
 			/>
 			<div
-				v-if="talhao"
+				v-if="geojson"
 				:key="i"
-				v-for="(feature, i) in talhao.geojson"
+				v-for="(feature, i) in geojson.features"
 			>
 				<div
 					:key="j"
-					v-for="(coordinates, j) in feature"
+					v-for="(coordinates, j) in feature.geometry.coordinates"
 				>
 					<l-polygon
-						:lat-lngs="coordinates.map(value => {
-							return new LatLng(value[1], value[0])
-						})"
+						:lat-lngs="coordinates.map(
+							(coordinate: number[][]) => {
+								return coordinate.map(values => new LatLng(values[1], values[0]))
+							})"
 							color="blue"
 					>
 				
@@ -44,10 +45,19 @@
 								</div>
 								<div class="d-flex ga-2 flex-column">
 									<div>
-										{{ talhao.nome }}
+										{{ feature.properties['FAZENDA'] }}
 									</div>
 									<div>
-										{{ talhao.cultura }}
+										{{ feature.properties['AREA_HA_TL'] }}
+									</div>
+									<div>
+										{{ feature.properties['MN_TL'] }}
+									</div>
+									<div>
+										{{ feature.properties['SOLO'] }}
+									</div>				
+									<div>
+										{{ feature.properties['CULTURA'] }}
 									</div>
 								</div>
 							</div>
@@ -63,21 +73,13 @@
 import "leaflet/dist/leaflet.css";
 import { LatLng } from "leaflet";
 import { LMap, LTileLayer, LPolygon, LTooltip } from "@vue-leaflet/vue-leaflet"
-
-export type TalhaoInMap = {
-	nome: string
-	cultura: string
-	geojson: ((([number, number])[])[])[]
-}
-
 const zoom = ref(6)
 
-const talhao = defineModel<TalhaoInMap | null>()
+const geojson = defineModel<any>()
 const center = ref<[number, number]>([0, 0])
 
-watch(talhao, () => {
-	if(!talhao.value) return
-	const point = talhao.value.geojson[0][0][0]
+watch(geojson, () => {
+	const point = geojson.value.features[0].geometry.coordinates[0][0][0]
 	const latlng = new LatLng(point[1], point[0])
 	center.value = [latlng.lat, latlng.lng]
 
@@ -85,4 +87,5 @@ watch(talhao, () => {
 		zoom.value = 14
 	}, 10)
 })
+
 </script>

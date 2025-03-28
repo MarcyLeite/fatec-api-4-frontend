@@ -40,7 +40,7 @@
     </div>
   
     <div style="height: 512px;">
-      <terravision-map v-model:model-value="geojson"/>
+      <terravision-map-preview v-model:model-value="geojson"/>
     </div>
 
     <v-snackbar v-model="snackbar.show" :timeout="3000" :color="snackbar.color">
