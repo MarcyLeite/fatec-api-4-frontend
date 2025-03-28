@@ -23,7 +23,7 @@
   </v-container>
 
   <v-container class="d-flex justify-end">
-    <v-btn @click="adicionarFazenda" color="deep-purple-darken-1">
+    <v-btn to="/fazenda/cadastro" color="deep-purple-darken-1">
       Cadastrar Nova Fazenda
     </v-btn>
   </v-container>
@@ -74,10 +74,6 @@ function carregarFazendas({ page, itemsPerPage }) {
     paginaFazenda.value = fazendas.value.slice(inicio, fim);
     loading.value = false;
   }, 500);
-}
-
-function adicionarFazenda() {
-  console.log("Fazenda adicionada");
 }
 
 function editarFazenda(item) {
