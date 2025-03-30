@@ -4,7 +4,7 @@
     <v-data-table-server
       v-model:items-per-page="itensPorPagina"
       :headers="headers"
-      :items="paginaFazenda"
+      :items="fazendas"
       :items-length="totalFazendas"
       :loading="loading"
       item-value="fazNome"
@@ -43,22 +43,23 @@ const headers = ref([
 
 const fazendas = ref([]);
 const itensPorPagina = ref(5);
-const paginaFazenda = ref([]);
 const totalFazendas = ref(0);
 const loading = ref(true);
 
-async function buscarFazenda(page = 0, size = 5) {
+async function buscarFazenda(page = 1, size = 5) {
   loading.value = true;
 
-  try {
-    const response = await axios.get(
-      "http://localhost:8080/fazenda/listar/{page}/{quantity}"
-    );
+  console.log(page, size)
 
+  try {
+    console.log(
+      `http://localhost:8080/fazenda/listar/${page}/${size}`)
+    const response = await axios.get(
+      `http://localhost:8080/fazenda/listar/${page}/${size}`
+    );
     fazendas.value = response.data.content;
     totalFazendas.value = response.data.totalElements || 0;
 
-    carregarFazendas({ page: 1, itemsPerPage: size });
   } catch (error) {
     console.error("Erro ao buscar fazendas:", error);
   } finally {
@@ -67,13 +68,8 @@ async function buscarFazenda(page = 0, size = 5) {
 }
 
 function carregarFazendas({ page, itemsPerPage }) {
-  loading.value = true;
-  setTimeout(() => {
-    const inicio = (page - 1) * itemsPerPage;
-    const fim = inicio + itemsPerPage;
-    paginaFazenda.value = fazendas.value.slice(inicio, fim);
-    loading.value = false;
-  }, 500);
+  console.log(page, itemsPerPage)
+  buscarFazenda(page - 1, itemsPerPage)
 }
 
 function editarFazenda(item) {
