@@ -26,6 +26,7 @@
 </template>
 
 <script setup>
+import router from '../router/index'
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
@@ -45,7 +46,7 @@ const loading = ref(false);
 async function buscarTalhao(page = 0, size = 5) {
   loading.value = true;
   try {
-    const response = await axios.get(`http://172.27.246.115:8080/talhao/listar/${page}/${size}`);
+    const response = await axios.get(`http://localhost:8080/talhao/listar/${page}/${size}`);
     talhoes.value = response.data.content;
     totalTalhoes.value = response.data.totalElements || 0;
     carregarTalhoes({ page: page + 1, itemsPerPage: size });
@@ -67,7 +68,7 @@ function carregarTalhoes({ page, itemsPerPage }) {
 }
 
 function adicionarTalhao() {
-  console.log("Talhão adicionado");
+  router.push('/talhao/cadastro/')
 }
 
 function editarTalhao(item) {
