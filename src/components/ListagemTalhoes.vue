@@ -6,7 +6,7 @@
       <v-data-table-server
       v-model:items-per-page="itensPorPagina"
       :headers="headers"
-      :items="paginaTalhao"
+      :items="talhoes"
       :items-length="totalTalhoes"
       :loading="loading"
       item-value="nome"
@@ -46,7 +46,6 @@ const headers = ref([
 
 const talhoes = ref([]);
 const itensPorPagina = ref(5);
-const paginaTalhao = ref([]);
 const totalTalhoes = ref(0);
 const loading = ref(false);
 const selectedTalhao = ref(null)
@@ -57,7 +56,6 @@ async function buscarTalhao(page = 0, size = 5) {
     const response = await axios.get(`http://localhost:8080/talhao/listar/${page}/${size}`);
     talhoes.value = response.data.content;
     totalTalhoes.value = response.data.totalElements || 0;
-    carregarTalhoes({ page: page + 1, itemsPerPage: size });
   } catch (error) {
     console.error('Erro ao buscar talhões:', error);
   } finally {
@@ -66,21 +64,11 @@ async function buscarTalhao(page = 0, size = 5) {
 }
 
 function carregarTalhoes({ page, itemsPerPage }) {
-  loading.value = true;
-  setTimeout(() => {
-    const inicio = (page - 1) * itemsPerPage;
-    const fim = inicio + itemsPerPage;
-    paginaTalhao.value = talhoes.value.slice(inicio, fim);
-    loading.value = false;
-  }, 500);
+  buscarTalhao(page - 1, itemsPerPage)
 }
 
 function adicionarTalhao() {
   router.push('/talhao/cadastro/')
-}
-
-function editarTalhao(item) {
-  console.log("Editando talhão", item);
 }
 
 onMounted(() => buscarTalhao(0, itensPorPagina.value));
