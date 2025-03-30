@@ -1,10 +1,21 @@
 <template>
-  <div class="bg-deep-purple-lighten-5 h-100">
-    <v-responsive class="align-centerfill-height mx-auto" max-width="900">
-      <cadastro-talhao />
-    </v-responsive>
-  </div>
+    <div class="bg-deep-purple-lighten-5 h-100">
+        <v-responsive
+      class="align-centerfill-height mx-auto "
+      max-width="900"
+    >
+        <ListagemTalhoes :talhoes = "talhoes" />
+        </v-responsive>
+    </div>
 </template>
 
-<script setup>
+<script>
+import ListagemTalhoes from '@/components/ListagemTalhoes.vue';
+
+export default {
+    components: {
+        ListagemTalhoes
+    },
+}
+
 </script>
