@@ -16,11 +16,20 @@
           color="#8E19E0"
           @click="editarFazenda(item)"
           class="btn-edicao-fazenda"
-          >Editar</v-btn
         >
+          Editar
+        </v-btn>
       </template>
     </v-data-table-server>
   </v-container>
+
+  <modal-edicao-fazenda
+    v-if="fazendaSelecionada"
+    v-model:abrir="abrirModal"
+    :fazenda="fazendaSelecionada"
+    @atualizou="carregarFazendas({ page: 1, itemsPerPage: itensPorPagina})"
+    @close="fecharModal"
+  />
 
   <v-container class="d-flex justify-end">
     <v-btn to="/fazenda/cadastro" color="deep-purple-darken-1">
@@ -29,9 +38,24 @@
   </v-container>
 </template>
 
+
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import ModalEdicaoFazenda from "./ModalEdicaoFazenda.vue";
+
+const abrirModal = ref(false);
+const fazendaSelecionada = ref(null);
+
+const editarFazenda = (item) => {
+  fazendaSelecionada.value = { ...item};
+  abrirModal.value = true;
+}
+
+const fecharModal = () => {
+  abrirModal.value = false;
+  fazendaSelecionada.value = null;
+}
 
 const headers = ref([
   { title: "Fazenda", key: "nome" },
@@ -70,10 +94,6 @@ async function buscarFazenda(page = 1, size = 5) {
 function carregarFazendas({ page, itemsPerPage }) {
   console.log(page, itemsPerPage)
   buscarFazenda(page - 1, itemsPerPage)
-}
-
-function editarFazenda(item) {
-  console.log("Editando fazenda", item);
 }
 
 onMounted(() => buscarFazenda());

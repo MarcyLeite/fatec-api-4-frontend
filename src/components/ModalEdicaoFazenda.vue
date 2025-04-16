@@ -10,73 +10,51 @@
             <v-text-field v-model="fazendaEdit.producao" :rules="rules" label="Produção Anual" />
             <v-text-field v-model="fazendaEdit.area" :rules="rules" label="Área" />
             <v-text-field v-model="fazendaEdit.tipoSolo" :rules="rules" label="Tipo Solo" />
-            <v-btn class="mt-2" type="submit" block color="primary">Salvar</v-btn>
-            <v-btn class="mt-2" block color="secondary" @click="cancelarEdicao">Cancelar</v-btn>
+            <v-btn class="mt-2" type="submit" block color="deep-purple-darken-1">Salvar</v-btn>
+            <v-btn class="mt-2" block color="deep-purple-lighten-3" @click="cancelarEdicao">Cancelar</v-btn>
           </v-form>
         </v-card-text>
       </v-card>
     </v-dialog>
   </template>
   
-  <script setup>
-    import { reactive, ref, watch } from 'vue'
-  
-    const props  = defineProps({
-        fazenda: Object,
-        abrir: Boolean
-    })
-  
-    const emit = defineEmits(['update', 'close'])
+<script setup>
+import { ref, watch } from 'vue'
 
-    const abrirModal = ref(props.abrir)
+const props = defineProps({
+  abrir: Boolean,
+  fazenda: Object
+})
 
-    watch(() => props.abrir, (val) => {
-        abrirModal.value = val
-        if(val && props.fazenda) {
-            Object.assign(fazendaEdit, props.fazenda)
-        }
-    })
+const emit = defineEmits(['update:abrir', 'atualizou', 'close'])
 
-    const fazendaEdit = reactive({
-        id: null,
-        nome: '',
-        cidade: '',
-        estado: '',
-        producao: '',
-        area: '',
-        tipoSolo: ''
-    })
+const abrirModal = ref(props.abrir)
+watch(() => props.abrir, (val) => abrirModal.value = val)
+watch(abrirModal, (val) => emit('update:abrir', val))
 
-    const rules = [
-        value => !!value || 'Campo Obrigatório',
-    ]
+const fazendaEdit = ref({ ...props.fazenda })
 
-    async function salvarEdicao() {
-        try {
-            const response = await fetch(`http://localhost:8080/fazenda/${fazendaEdit.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'Application/json'
-                },
-                body: JSON.stringify(fazendaEdit)
-            })
+const rules = [
+  value => !!value || 'Campo obrigatório',
+]
 
-            if(response.ok) {
-                throw new Error('Erro ao atualizar fazenda')
-            }
+const salvarEdicao = async () => {
+  try {
+    await fetch(`http://localhost:8080/fazenda/editar/${fazendaEdit.value.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fazendaEdit.value)
+    });
 
-            const dadosAtualiazados = await response.json()
-            emit('update', dadosAtualiazados)
-            abrirModal.value = false
-            emit('close')
-        } catch (err) {
-            console.error('Erro ao salvar:', err)
-        }
-    }
+    emit('atualizou') 
+    emit('update:abrir', false) 
+  } catch (err) {
+    console.error('Erro ao salvar fazenda:', err)
+  }
+}
 
-    const cancelarEdicao = () => {
-        abrirModal.value = false
-        emit('close')
-    }
-    
-  </script>
+const cancelarEdicao = () => {
+  emit('update:abrir', false)
+  emit('close')
+}
+</script>
