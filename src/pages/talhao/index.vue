@@ -1,10 +1,9 @@
 <template>
-    <div class="bg-deep-purple-lighten-5 h-100">
+    <div class="bg-deep-purple-lighten-5" style="max-height: 100vh;">
         <v-responsive
-      class="align-centerfill-height mx-auto "
-      max-width="900"
-    >
-        <ListagemTalhoes :talhoes = "talhoes" />
+            class="align-center fill-height mx-auto"
+        >
+            <ListagemTalhoes :talhoes="talhoes" />
         </v-responsive>
     </div>
 </template>
