@@ -1,12 +1,12 @@
 <template>
-    <v-dialog v-model="abrirModal" max-width="500">
+    <v-dialog v-model="props.abrir" max-width="500">
       <v-card>
         <v-card-title class="text-h6">Editar Fazenda</v-card-title>
         <v-card-text>
           <v-form @submit.prevent="salvarEdicao">
             <v-text-field v-model="fazendaEdit.nome" :rules="rules" label="Nome Fazenda" />
-            <v-text-field v-model="fazendaEdit.cidade" :rules="rules" label="Cidade" />
-            <v-text-field v-model="fazendaEdit.estado" :rules="rules" label="Estado" />
+            <v-select v-model="fazendaEdit.estado" :items="estados" item-title="nome" item-value="id" :rules="rules" label="Estado" />
+            <v-select v-model="fazendaEdit.cidade" :items="cidades" item-title="nome" item-value="id" :rules="rules" label="Cidade" />
             <v-text-field v-model="fazendaEdit.producao" :rules="rules" label="Produção Anual" />
             <v-text-field v-model="fazendaEdit.area" :rules="rules" label="Área" />
             <v-text-field v-model="fazendaEdit.tipoSolo" :rules="rules" label="Tipo Solo" />
@@ -19,6 +19,8 @@
   </template>
   
 <script setup>
+
+import axios from 'axios'
 import { ref, watch } from 'vue'
 
 const props = defineProps({
@@ -26,17 +28,48 @@ const props = defineProps({
   fazenda: Object
 })
 
-const emit = defineEmits(['update:abrir', 'atualizou', 'close'])
+const emit = defineEmits(['atualizou', 'close'])
 
-const abrirModal = ref(props.abrir)
-watch(() => props.abrir, (val) => abrirModal.value = val)
-watch(abrirModal, (val) => emit('update:abrir', val))
 
-const fazendaEdit = ref({ ...props.fazenda })
+const estados = ref([])
+const cidades = ref([])
 
-const rules = [
-  value => !!value || 'Campo obrigatório',
-]
+const rules = [(v) => !!v || 'Campo obrigatório']
+
+const fazendaEdit = ref({})
+
+watch(() => props.fazenda, (novaFazenda) => {
+  fazendaEdit.value = { ...novaFazenda }
+}, { immediate: true })
+
+
+onMounted(async () => {
+  await carregarEstados()
+})
+
+watch(() => fazendaEdit.value.estado, async (novoEstado) => {
+  if(novoEstado) {
+    await carregarCidades(novoEstado)
+  }
+})
+
+async function carregarEstados() {
+  try {
+    const response = await axios.get('http://localhost:8080/estado/all')
+    estados.value = response.data
+  } catch (err){
+    console.error("Erro ao carregar estados", err)
+  }
+}
+
+async function carregarCidades() {
+  try {
+    const response = await axios.get('http://localhost:8080/cidade/all')
+    cidades.value = response.data
+  } catch (err) {
+    console.error("Erro ao carregar cidades", err)
+  }
+}
 
 const salvarEdicao = async () => {
   try {
