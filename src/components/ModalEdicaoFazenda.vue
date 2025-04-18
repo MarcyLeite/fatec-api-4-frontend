@@ -5,8 +5,8 @@
         <v-card-text>
           <v-form @submit.prevent="salvarEdicao">
             <v-text-field v-model="fazendaEdit.nome" :rules="rules" label="Nome Fazenda" />
-            <v-select v-model="fazendaEdit.estado" :items="estados" item-title="nome" item-value="id" :rules="rules" label="Estado" />
-            <v-select v-model="fazendaEdit.cidade" :items="cidades" item-title="nome" item-value="id" :rules="rules" label="Cidade" />
+            <v-select v-model="fazendaEdit.estado" :items="estados" item-title="nome" item-value="id" label="Estado" />
+            <v-select v-model="fazendaEdit.cidade" :items="cidades" item-title="nome" item-value="id" label="Cidade" />
             <v-text-field v-model="fazendaEdit.producao" :rules="rules" label="Produção Anual" />
             <v-text-field v-model="fazendaEdit.area" :rules="rules" label="Área" />
             <v-text-field v-model="fazendaEdit.tipoSolo" :rules="rules" label="Tipo Solo" />
@@ -53,7 +53,7 @@ watch(() => fazendaEdit.value.estado, async (novoEstado) => {
   }
 })
 
-async function carregarEstados() {
+const carregarEstados = async () => {
   try {
     const response = await axios.get('http://localhost:8080/estado/all')
     estados.value = response.data
@@ -62,7 +62,7 @@ async function carregarEstados() {
   }
 }
 
-async function carregarCidades() {
+ const carregarCidades = async () => {
   try {
     const response = await axios.get('http://localhost:8080/cidade/all')
     cidades.value = response.data
@@ -73,18 +73,25 @@ async function carregarCidades() {
 
 const salvarEdicao = async () => {
   try {
+    const fazendaParaSalvar = {
+      ...fazendaEdit.value,
+      cidade: { id: fazendaEdit.value.cidade },
+      estado: { id: fazendaEdit.value.estado }
+    };
+
     await fetch(`http://localhost:8080/fazenda/editar/${fazendaEdit.value.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(fazendaEdit.value)
+      body: JSON.stringify(fazendaParaSalvar)
     });
 
-    emit('atualizou') 
-    emit('update:abrir', false) 
+    emit('atualizou');
+    emit('update:abrir', false);
   } catch (err) {
-    console.error('Erro ao salvar fazenda:', err)
+    console.error('Erro ao salvar fazenda:', err);
   }
-}
+};
+
 
 const cancelarEdicao = () => {
   emit('update:abrir', false)
