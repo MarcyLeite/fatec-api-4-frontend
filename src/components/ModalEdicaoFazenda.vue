@@ -19,7 +19,6 @@
   </template>
   
 <script setup>
-
 import axios from 'axios'
 import { ref, watch, onMounted } from 'vue'
 
@@ -30,37 +29,12 @@ const props = defineProps({
 
 const emit = defineEmits(['atualizou', 'close'])
 
-
 const estados = ref([])
 const cidades = ref([])
 
 const rules = [(v) => !!v || 'Campo obrigatório']
 
 const fazendaEdit = ref({})
-
-watch(() => props.fazenda, (novaFazenda) => {
-  fazendaEdit.value = { ...novaFazenda }
-}, { immediate: true })
-
-
-onMounted(async () => {
-  await carregarEstados()
-  await carregarCidades()
-})
-
-watch(
-  () => props.abrir,
-  async (abrindo) => {
-    if (abrindo) {
-      fazendaEdit.value = { ...props.fazenda }
-
-      await carregarEstados()
-      await carregarCidades()
-    }
-  }
-)
-
-
 
 const carregarEstados = async () => {
   try {
@@ -75,12 +49,24 @@ const carregarCidades = async () => {
   try {
     const response = await axios.get('http://localhost:8080/cidade/all')
     cidades.value = response.data
-    console.log("Cidades carregadas:", cidades.value)
   } catch (err) {
     console.error("Erro ao carregar cidades", err)
   }
 }
 
+watch(() => props.fazenda, (novaFazenda) => {
+  fazendaEdit.value = {
+    ...novaFazenda,
+    producao: novaFazenda?.prodAnual ?? '',
+    estado: novaFazenda?.cidade?.estado ?? null,  
+    cidade: novaFazenda?.cidade ?? null,
+  };
+}, { immediate: true });
+
+onMounted(async () => {
+  await carregarEstados()
+  await carregarCidades()
+})
 
 const salvarEdicao = async () => {
   try {
@@ -107,8 +93,6 @@ const salvarEdicao = async () => {
     console.error('Erro ao salvar fazenda:', err);
   }
 };
-
-
 
 const cancelarEdicao = () => {
   emit('update:abrir', false)
