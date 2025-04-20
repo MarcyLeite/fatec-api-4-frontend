@@ -21,7 +21,7 @@
 <script setup>
 
 import axios from 'axios'
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 
 const props = defineProps({
   abrir: Boolean,
@@ -45,13 +45,22 @@ watch(() => props.fazenda, (novaFazenda) => {
 
 onMounted(async () => {
   await carregarEstados()
+  await carregarCidades()
 })
 
-watch(() => fazendaEdit.value.estado, async (novoEstado) => {
-  if(novoEstado) {
-    await carregarCidades(novoEstado)
+watch(
+  () => props.abrir,
+  async (abrindo) => {
+    if (abrindo) {
+      fazendaEdit.value = { ...props.fazenda }
+
+      await carregarEstados()
+      await carregarCidades()
+    }
   }
-})
+)
+
+
 
 const carregarEstados = async () => {
   try {
@@ -62,21 +71,28 @@ const carregarEstados = async () => {
   }
 }
 
- const carregarCidades = async () => {
+const carregarCidades = async () => {
   try {
     const response = await axios.get('http://localhost:8080/cidade/all')
     cidades.value = response.data
+    console.log("Cidades carregadas:", cidades.value)
   } catch (err) {
     console.error("Erro ao carregar cidades", err)
   }
 }
 
+
 const salvarEdicao = async () => {
   try {
     const fazendaParaSalvar = {
       ...fazendaEdit.value,
-      cidade: { id: fazendaEdit.value.cidade },
-      estado: { id: fazendaEdit.value.estado }
+      cidade: {
+        id: typeof fazendaEdit.value.cidade === 'object' ? fazendaEdit.value.cidade.id : fazendaEdit.value.cidade
+      },
+      estado: {
+        id: typeof fazendaEdit.value.estado === 'object' ? fazendaEdit.value.estado.id : fazendaEdit.value.estado
+      },
+      prodAnual: Number(fazendaEdit.value.producao)
     };
 
     await fetch(`http://localhost:8080/fazenda/editar/${fazendaEdit.value.id}`, {
@@ -91,6 +107,7 @@ const salvarEdicao = async () => {
     console.error('Erro ao salvar fazenda:', err);
   }
 };
+
 
 
 const cancelarEdicao = () => {
