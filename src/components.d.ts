@@ -10,6 +10,7 @@ declare module 'vue' {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     CadastroFazenda: typeof import('./components/CadastroFazenda.vue')['default']
     CadastroTalhao: typeof import('./components/CadastroTalhao.vue')['default']
+    CadastroUsuario: typeof import('./components/CadastroUsuario.vue')['default']
     Footer: typeof import('./components/Footer.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     ListagemFazendas: typeof import('./components/ListagemFazendas.vue')['default']
