@@ -1,8 +1,18 @@
 <template>
     <form>
+      <v-text-field
+            v-model="state.nome"
+            :counter="10"
+            :rules="rules.nome"
+            label="Nome"
+            required
+            @blur="v$.nome.$touch"
+            @input="v$.nome.$touch"
+      ></v-text-field>
+
         <v-text-field
           v-model="state.email"
-          :error-messages="v$.email.$errors.map(e => e.$message)"
+          :rules="rules.email"
           label="E-mail"
           required
           @blur="v$.email.$touch"
@@ -12,7 +22,7 @@
         <v-text-field
             v-model="state.senha"
             :counter="10"
-            :error-messages="v$.senha.$errors.map(e => e.$message)"
+            :rules="rules.senha"
             label="Senha"
             required
             @blur="v$.senha.$touch"
@@ -21,7 +31,7 @@
 
       <v-select
         v-model="state.select"
-        :error-messages="v$.select.$errors.map(e => e.$message)"
+        :rules="rules.select"
         :items="tipoUsuario"
         label="Tipo usuário"
         required
@@ -31,7 +41,7 @@
 
       <v-btn
         class="me-4"
-        @click="v$.$validate"
+        @click="submitForm"
       >
         submit
       </v-btn>
@@ -39,64 +49,48 @@
         clear
       </v-btn>
     </form>
-  </template>
+</template>
   
-  <script setup>
-    import { reactive } from 'vue'
-    import { useVuelidate } from '@vuelidate/core'
-    import { email, required } from '@vuelidate/validators'
-    import axios from 'axios'
-    import router from '@/router'
+<script setup>
+  import { reactive, onMounted } from 'vue'
+  import axios from 'axios'
   
-    const initialState = {
-      email: '',
-      senha: '',
-      select: null,
-    }
+  const initialState = { nome: '', email: '', senha: '', select: null }
+  const state = reactive({ ...initialState })
+  const tipoUsuario = ['Administrador', 'Consultor', 'Analista']
+  
+  const rules = {
+  nome: [(v) => !!v || 'Nome é obrigatório'],
+  email: [(v) => !!v || 'E-mail é obrigatório', (v) => /.+@.+\..+/.test(v) || 'E-mail inválido'],
+  senha: [(v) => !!v || 'Senha é obrigatória'],
+  select: [(v) => !!v || 'Selecione um tipo de usuário'],
+}
     
-    const tipoUsuario = [
-      'Administrador',
-      'Consultor',
-      'Analista',
-    ]
+  const submitForm = async () => {
+    const isValid = await $refs.form.validate()
+    if (!isValid) return
   
-    const state = reactive({
-      ...initialState,
-    })
-  
-  
-    const rules = {
-      email: { required, email },
-      senha: { required },
-      select: { required },
-      items: { required },
+    const body = {
+      nome: state.nome,
+      email: state.email,
+      role: state.select,
     }
-
-    const cadastrarUsuario = async () => {
-        const body = {
-            email: email.value,
-            senha: senha.value,
-            select: select.value,
-        }
-
-        loading.value = true
-        await axios.post('http://localhost:8080/usuario/cadastrar', body)
-
-        loading.value = false
-        router.push('/usuario/')
+  
+    try {
+      await axios.post('http://localhost:8080/usuario/cadastrar', body)
+      router.push('/usuario/')
+    } catch (error) {
+      console.error('Erro ao cadastrar:', error)
     }
+  }
 
-    onMounted(async () => {
-        cadastrarUsuario()
-    })
+  onMounted(() => {
+    submitForm()
+    console.log("CadastroUsuario component mounted!");
+
+  });
   
-    const v$ = useVuelidate(rules, state)
-  
-    function clear () {
-      v$.value.$reset()
-  
-      for (const [key, value] of Object.entries(initialState)) {
-        state[key] = value
-      }
-    }
-  </script>
+  function clear() {
+    Object.assign(state, initialState)
+  }
+</script>
