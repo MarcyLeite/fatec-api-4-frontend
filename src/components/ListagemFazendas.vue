@@ -1,5 +1,6 @@
 <template>
   <div class="fazendas-titulo text-h2 ma-2 pa-2">Fazendas</div>
+
   <v-container class="d-flex justify-center align-center">
     <v-data-table-server
       v-model:items-per-page="itensPorPagina"
@@ -20,6 +21,10 @@
           Editar
         </v-btn>
       </template>
+
+      <template v-slot:no-data>
+        <div class="text-center pa-4">Nenhuma fazenda encontrada.</div>
+      </template>
     </v-data-table-server>
   </v-container>
 
@@ -27,7 +32,7 @@
     v-if="fazendaSelecionada"
     v-model:abrir="abrirModal"
     :fazenda="fazendaSelecionada"
-    @atualizou="carregarFazendas({ page: 1, itemsPerPage: itensPorPagina})"
+    @atualizou="carregarFazendas({ page: 1, itemsPerPage: itensPorPagina })"
     @close="fecharModal"
   />
 
@@ -38,7 +43,6 @@
   </v-container>
 </template>
 
-
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
@@ -48,14 +52,14 @@ const abrirModal = ref(false);
 const fazendaSelecionada = ref(null);
 
 const editarFazenda = (item) => {
-  fazendaSelecionada.value = { ...item};
+  fazendaSelecionada.value = { ...item };
   abrirModal.value = true;
-}
+};
 
 const fecharModal = () => {
   abrirModal.value = false;
   fazendaSelecionada.value = null;
-}
+};
 
 const headers = ref([
   { title: "Fazenda", key: "nome" },
@@ -70,20 +74,15 @@ const itensPorPagina = ref(5);
 const totalFazendas = ref(0);
 const loading = ref(true);
 
-async function buscarFazenda(page = 1, size = 5) {
+async function buscarFazenda(page = 0, size = itensPorPagina.value) {
   loading.value = true;
 
-  console.log(page, size)
-
   try {
-    console.log(
-      `http://localhost:8080/fazenda/listar/${page}/${size}`)
     const response = await axios.get(
       `http://localhost:8080/fazenda/listar/${page}/${size}`
     );
-    fazendas.value = response.data.content;
+    fazendas.value = response.data.content || [];
     totalFazendas.value = response.data.totalElements || 0;
-
   } catch (error) {
     console.error("Erro ao buscar fazendas:", error);
   } finally {
@@ -91,10 +90,14 @@ async function buscarFazenda(page = 1, size = 5) {
   }
 }
 
-function carregarFazendas({ page, itemsPerPage }) {
-  console.log(page, itemsPerPage)
-  buscarFazenda(page - 1, itemsPerPage)
+function carregarFazendas(options) {
+  const page = options?.page ?? 1;
+  const itemsPerPage = options?.itemsPerPage ?? itensPorPagina.value;
+  itensPorPagina.value = itemsPerPage;
+  buscarFazenda(page - 1, itemsPerPage);
 }
 
-onMounted(() => buscarFazenda());
+onMounted(() => {
+  buscarFazenda(0, itensPorPagina.value);
+});
 </script>

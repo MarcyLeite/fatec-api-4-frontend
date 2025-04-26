@@ -10,6 +10,7 @@ declare module 'vue' {
     CadastroFazenda: typeof import('./components/CadastroFazenda.vue')['default']
     CadastroResultado: typeof import('./components/CadastroResultado.vue')['default']
     CadastroTalhao: typeof import('./components/CadastroTalhao.vue')['default']
+    CadastroUsuario: typeof import('./components/CadastroUsuario.vue')['default']
     Footer: typeof import('./components/Footer.vue')['default']
     ListagemFazendas: typeof import('./components/ListagemFazendas.vue')['default']
     ListagemTalhoes: typeof import('./components/ListagemTalhoes.vue')['default']
