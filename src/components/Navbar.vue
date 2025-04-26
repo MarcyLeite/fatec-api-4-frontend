@@ -34,6 +34,11 @@
           <v-list-item-title>Talhão</v-list-item-title>
         </v-list-content>
       </v-list-item>
+      <v-list-item link href="/resultado">
+        <v-list-content>
+          <v-list-item-title>Resultado</v-list-item-title>
+        </v-list-content>
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
