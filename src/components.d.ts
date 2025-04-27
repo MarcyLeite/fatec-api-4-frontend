@@ -11,6 +11,8 @@ declare module 'vue' {
     CadastroResultado: typeof import('./components/CadastroResultado.vue')['default']
     CadastroTalhao: typeof import('./components/CadastroTalhao.vue')['default']
     CadastroUsuario: typeof import('./components/CadastroUsuario.vue')['default']
+    EditarResultado: typeof import('./components/EditarResultado.vue')['default']
+    EditToolbar: typeof import('./components/EditToolbar.vue')['default']
     Footer: typeof import('./components/Footer.vue')['default']
     ListagemFazendas: typeof import('./components/ListagemFazendas.vue')['default']
     ListagemTalhoes: typeof import('./components/ListagemTalhoes.vue')['default']
@@ -19,6 +21,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TerravisionMap: typeof import('./components/TerravisionMap.vue')['default']
+    TerravisionMapEdit: typeof import('./components/TerravisionMapEdit.vue')['default']
     TerravisionMapPreview: typeof import('./components/TerravisionMapPreview.vue')['default']
   }
 }
