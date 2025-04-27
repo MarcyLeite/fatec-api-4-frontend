@@ -12,6 +12,7 @@ declare module 'vue' {
     CadastroTalhao: typeof import('./components/CadastroTalhao.vue')['default']
     EditarResultado: typeof import('./components/EditarResultado.vue')['default']
     EditToolbar: typeof import('./components/EditToolbar.vue')['default']
+    CadastroUsuario: typeof import('./components/CadastroUsuario.vue')['default']
     Footer: typeof import('./components/Footer.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     ListagemFazendas: typeof import('./components/ListagemFazendas.vue')['default']
