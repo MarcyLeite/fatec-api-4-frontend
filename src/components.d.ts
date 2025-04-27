@@ -7,17 +7,15 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AppFooter: typeof import('./components/AppFooter.vue')['default']
     CadastroFazenda: typeof import('./components/CadastroFazenda.vue')['default']
+    CadastroResultado: typeof import('./components/CadastroResultado.vue')['default']
     CadastroTalhao: typeof import('./components/CadastroTalhao.vue')['default']
     CadastroUsuario: typeof import('./components/CadastroUsuario.vue')['default']
     EditarResultado: typeof import('./components/EditarResultado.vue')['default']
     EditToolbar: typeof import('./components/EditToolbar.vue')['default']
     Footer: typeof import('./components/Footer.vue')['default']
-    HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     ListagemFazendas: typeof import('./components/ListagemFazendas.vue')['default']
     ListagemTalhoes: typeof import('./components/ListagemTalhoes.vue')['default']
-    Map: typeof import('./components/Map.vue')['default']
     ModalEdicaoFazenda: typeof import('./components/ModalEdicaoFazenda.vue')['default']
     Navbar: typeof import('./components/Navbar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
