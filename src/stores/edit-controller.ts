@@ -103,7 +103,7 @@ export const useMapEditStore = defineStore('mapEdit', () => {
 
 		locked.value = false
 
-		if(enabled.value) return
+		if(!enabled.value) return
 
 		switch (optionId) {
 			case 0:
@@ -157,6 +157,9 @@ export const useMapEditStore = defineStore('mapEdit', () => {
 
 		locked.value = false
 		
+		
+		if(!enabled.value) return
+
 		switch (featureId) {
 			case 0:
 				callback.value = selectFeature
@@ -193,6 +196,8 @@ export const useMapEditStore = defineStore('mapEdit', () => {
 				return coordinate.map((point) => new LatLng(point[1], point[0]))
 			})
 		})
+
+		console.log(markers)
 
 		markerGroupList.value = markers[0]
 	}
