@@ -144,9 +144,11 @@ const saveMissao = async () => {
   data.append('missao_id', selectedMissao.value?.toString() ?? '')
   data.append('file', file)
 
-  axios.post('http://localhost:8080/result/qa', data, {
+  await axios.post('http://localhost:8080/result/qa', data, {
     headers: { "Content-Type": "multipart/form-data" }
   })
+  
+  window.location.reload()
 }
 
 editController.$subscribe((_, state) => {
