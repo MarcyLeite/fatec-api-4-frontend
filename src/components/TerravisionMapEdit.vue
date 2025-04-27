@@ -152,9 +152,7 @@ const zoom = ref(6)
 const center = ref<[number, number]>([0, 0])
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const resultado = defineModel<any>()
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const featureList = ref<any[]>([])
+const featureList = defineModel<any>()
 
 editController.$subscribe((_, state) => {
   if(state.locked) {
@@ -164,10 +162,13 @@ editController.$subscribe((_, state) => {
     map.value.leafletObject.dragging.enable()
     map.value.leafletObject.scrollWheelZoom.enable()
   }
+
 })
 
-watch([resultado], () => {
-  featureList.value = resultado.value.features
+watch([featureList], () => {
+  if(!featureList.value) {
+    return
+  }
   const point = featureList.value[0].geometry.coordinates[0][0][0]
 	const latlng = new LatLng(point[1], point[0])
   

@@ -19,6 +19,9 @@ export const useMapEditStore = defineStore('mapEdit', () => {
 	const featureOption = ref<number>()
 
 	const locked = ref(false)
+	const enabled = ref(false)
+
+	const toggleEnable = (v) => enabled.value = v
 
 	const markerGroupList = ref<LatLng[][]>([])
 	const lineGroupList = ref<[LatLng, LatLng][][]>([])
@@ -44,7 +47,14 @@ export const useMapEditStore = defineStore('mapEdit', () => {
 	const featureMouseUp = ref<Callback>()
 	const featureMouseDown = ref<Callback>()
 	const mapMouseMove = ref<Callback>()
-	
+
+	const gettingFeature = ref(false)
+
+	const featureList = ref<any[]>([])
+
+	const saving = ref(false)
+	const toggleSave = (v: boolean) => saving.value = v
+
 	const buildLine = () => {
 		const lineGroup: [LatLng, LatLng][][] = []
 		for(const markerGroup of markerGroupList.value) {
@@ -71,7 +81,6 @@ export const useMapEditStore = defineStore('mapEdit', () => {
 		featureList[selectedFeatureIndex.value ?? 0].geometry.coordinates = selectedFeature.value
 	}
 
-
 	const updatePointOption = (optionId?: number) => {
 		markerGroupList.value = []
 		lineGroupList.value = []
@@ -94,8 +103,8 @@ export const useMapEditStore = defineStore('mapEdit', () => {
 
 		locked.value = false
 
-		locked.value = false
-		
+		if(enabled.value) return
+
 		switch (optionId) {
 			case 0:
 				setTimeout(() => {
@@ -172,6 +181,7 @@ export const useMapEditStore = defineStore('mapEdit', () => {
 	}
 
 	const selectFeature: Callback = ({ feature, index }) => {
+		console.log(feature)
 		selectedFeatureIndex.value = index
 		selectedFeature.value = feature
 	}
@@ -277,7 +287,7 @@ export const useMapEditStore = defineStore('mapEdit', () => {
 			return [p.x, p.y]
 		}),
 		(() => {
-			const value = markerGroupList.value[0][markerGroupList.value[0].length - 1]
+			const value = markerGroupList.value[0][0]
 			const p = point(value.lng, value.lat)
 			return [p.x, p.y]
 		})()
@@ -315,7 +325,9 @@ export const useMapEditStore = defineStore('mapEdit', () => {
 		}
 		
 		featureList.push({
+			type: "Feature",
 			geometry: {
+				type: "MultiPolygon",
 				coordinates: 
 				[ 
 					markerGroupList.value.map(markerGroup => {
@@ -323,7 +335,7 @@ export const useMapEditStore = defineStore('mapEdit', () => {
 							const p = point(value.lng, value.lat)
 							return [p.x, p.y]
 						}), (() => {
-							const value = markerGroup[markerGroup.length - 1]
+							const value = markerGroup[0]
 							const p = point(value.lng, value.lat)
 							return [p.x, p.y]
 						})()]
@@ -363,6 +375,12 @@ export const useMapEditStore = defineStore('mapEdit', () => {
 	}
 
 	return {
+		enabled,
+		toggleEnable,
+		gettingFeature,
+		featureList,
+		saving,
+		toggleSave,
 		markerGroupList,
 		lineGroupList,
 		deletedFeatureIndexList,
