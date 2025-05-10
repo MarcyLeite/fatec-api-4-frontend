@@ -12,6 +12,13 @@
         @update:options="carregarUsuarios"
         class="usuarios-table rounded-lg elevation-5 bg-deep-purple-lighten-5"
       >
+
+      <template v-slot:item.ativo="{ item }">
+        <span :class="item.ativo ? 'text-success' : 'text-error'">
+          {{ item.ativo ? 'Ativo' : 'Inativo' }}
+        </span>
+      </template>
+
         <template v-slot:item.edicao="{ item }">
           <v-btn
             color="#8E19E0"
@@ -22,16 +29,6 @@
           </v-btn>
         </template>
 
-        <template v-slot:item.deletar="{ item }">
-          <v-btn
-            color="#ef4438"
-            @click="deletarUsuario(item)"
-            class="btn-deletar-usuario"
-          >
-            Deletar
-          </v-btn>
-        </template>
-  
         <template v-slot:no-data>
           <div class="text-center pa-4">Nenhum usuário encontrado.</div>
         </template>
@@ -54,10 +51,10 @@
   const abrirModal = ref(false);
   const usuarioSelecionado = ref(null);
   
- //const editarUsuario = (item) => {
- //   usuarioSelecionado.value = { ...item };
- //   abrirModal.value = true;
- // };
+  const editarUsuario = (item) => {
+    usuarioSelecionado.value = { ...item };
+    abrirModal.value = true;
+  };
   
   const fecharModal = () => {
     abrirModal.value = false;
@@ -68,9 +65,8 @@
     { title: "Usuário", key: "nome" },
     { title: "Email", key: "email", align: "end" },
     { title: "Cargo", key: "role", align: "end" },
-    { title: "Status", key: "status" },
+    { title: "Status", key: "ativo" },
     { title: "Editar", key: "edicao", align: "center", sortable: false },
-    { title: "Deletar", key: "deletar", align: "center", sortable: false }
   ]);
   
   const usuarios = ref([]);
