@@ -24,6 +24,7 @@
         :counter="10"
         :rules="rules.senha"
         label="Senha"
+        type="password"
         required
       ></v-text-field>
 
