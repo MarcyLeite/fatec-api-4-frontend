@@ -1,20 +1,21 @@
 <template>
-    <div class="bg-deep-purple-lighten-5" style="max-height: 100vh;">
-        <v-responsive
-            class="align-center fill-height mx-auto"
-        >
-            <ListagemTalhoes :talhoes="talhoes" />
-        </v-responsive>
-    </div>
+  <div
+    class="bg-deep-purple-lighten-5"
+    style="max-height: 100vh;"
+  >
+    <v-responsive
+      class="align-center fill-height mx-auto"
+    >
+      <ListagemTalhoes />
+    </v-responsive>
+  </div>
 </template>
 
-<script>
-import ListagemTalhoes from '@/components/ListagemTalhoes.vue';
+<script setup lang="ts">
+import { useAppStore } from '@/stores/app'
 
-export default {
-    components: {
-        ListagemTalhoes
-    },
-}
-
+const store = useAppStore()
+onMounted(async () => {
+    await store.verify()
+})
 </script>

@@ -1,21 +1,19 @@
 <template>
-    <div class="bg-deep-purple-lighten-5 h-100">
-        <v-responsive
+  <div class="bg-deep-purple-lighten-5 h-100">
+    <v-responsive
       class="align-centerfill-height mx-auto "
       max-width="900"
     >
-        <CadastroResultado />
-        </v-responsive>
-    </div>
-    </template>
+      <CadastroResultado />
+    </v-responsive>
+  </div>
+</template>
 
-<script>
-import CadastroResultado from '@/components/CadastroResultado.vue';
+<script setup lang="ts">
+import { useAppStore } from '@/stores/app'
 
-export default {
-  components: {
-    CadastroResultado
-  }
-}
-
+const store = useAppStore()
+onMounted(async () => {
+    await store.verify()
+})
 </script>
