@@ -1,55 +1,91 @@
 <template>
   <div class="h-100 d-flex flex-grow-1">
     <div>
-      <v-sheet width="18rem" class="pa-8 h-100">
+      <v-sheet
+        width="18rem"
+        class="pa-8 h-100"
+      >
         <div class="d-flex flex-column justify-space-between h-100">
           <div>
             <div>
               Missão:
             </div>
-            <v-autocomplete :items="missaoList.map(e => e.id)" v-model:model-value="selectedMissao" />
+            <v-autocomplete
+              v-model:model-value="selectedMissao"
+              :items="missaoList.map(e => e.id)"
+            />
             <div>
               Talhão
             </div>
-            <v-autocomplete :items="talhaoList ?? []" v-model:model-value="selectedTalhao" />
+            <v-autocomplete
+              v-model:model-value="selectedTalhao"
+              :items="talhaoList ?? []"
+            />
           </div>
-          <div v-if="!editController.enabled && selectedMissao !== null && resultFrom === 'ai'" class="d-flex ga-2 flex-column">
+          <div
+            v-if="!editController.enabled && selectedMissao !== null && resultFrom === 'ai'"
+            class="d-flex ga-2 flex-column"
+          >
             <div class="d-flex w-100">
-              <v-btn class="w-100" color="deep-purple-darken-1" @click="() => {
-                editController.toggleEnable(true)
-              }"> Editar </v-btn>
+              <v-btn
+                class="w-100"
+                color="deep-purple-darken-1"
+                @click="() => {
+                  editController.toggleEnable(true)
+                }"
+              >
+                Editar
+              </v-btn>
             </div>
             <div class="d-flex ga-2">
-              <v-btn color="red-darken-4" @click="() => {
-                  axios.post('http://localhost:8080/relatorio/salvar', {
+              <v-btn
+                color="red-darken-4"
+                @click="() => {
+                  axios.post(`http://localhost:8080/relatorio/salvar?token=${token}`, {
                     dataInicioRelatorio: date,
                     status: 'Reproved',
                     userId: 1,
                     missaoId: selectedMissao
                   })
                   saveMissao()
-              }"> Reprovar </v-btn>
-              <v-btn color="green-darken-3" @click="() => {
-                  axios.post('http://localhost:8080/relatorio/salvar', {
+                }"
+              >
+                Reprovar
+              </v-btn>
+              <v-btn
+                color="green-darken-3"
+                @click="() => {
+                  axios.post(`http://localhost:8080/relatorio/salvar?token=${token}`, {
                     dataInicioRelatorio: date,
                     status: 'Aproved',
                     userId: 1,
                     missaoId: selectedMissao
                   })
                   saveMissao()
-              }"> Aprovar </v-btn>
+                }"
+              >
+                Aprovar
+              </v-btn>
             </div>
           </div>
-          <div v-if="editController.enabled && selectedMissao !== null && selectedTalhao !== null" class="w-100">
-            <v-btn class="w-100" @click="() => {
-                  axios.post('http://localhost:8080/relatorio/salvar', {
-                    dataInicioRelatorio: date,
-                    status: 'Edited',
-                    userId: 1,
-                    missaoId: selectedMissao
-                  })
-                  saveMissao()
-              }"> Salvar Edição </v-btn>
+          <div
+            v-if="editController.enabled && selectedMissao !== null && selectedTalhao !== null"
+            class="w-100"
+          >
+            <v-btn
+              class="w-100"
+              @click="() => {
+                axios.post(`http://localhost:8080/relatorio/salvar?token=${token}`, {
+                  dataInicioRelatorio: date,
+                  status: 'Edited',
+                  userId: 1,
+                  missaoId: selectedMissao
+                })
+                saveMissao()
+              }"
+            >
+              Salvar Edição
+            </v-btn>
           </div>
         </div>
       </v-sheet>
@@ -67,6 +103,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAppStore } from '@/stores/app'
 import { useMapEditStore } from '@/stores/edit-controller'
 import axios from 'axios'
 
@@ -80,6 +117,8 @@ const selectedTalhao = ref<number | null>(null)
 const missaoList = ref<any[]>([])
 const talhaoList = ref<number[]>([])
 const resultFrom = ref<string>()
+
+const { token } = useAppStore()
 
 const talhaoFeatureDict = ref<Record<number, any>>({})
 
@@ -98,17 +137,17 @@ const fetchResultado = async () => {
 
   let result
   try {
-    result = await axios.get(`http://localhost:8080/result/${selectedMissao.value}/QA/${selectedTalhao.value}`)
+    result = await axios.get(`http://localhost:8080/result/${selectedMissao.value}/QA/${selectedTalhao.value}?token=${token}`)
     resultFrom.value = 'qa'
   } catch {
-    result = await axios.get(`http://localhost:8080/result/${selectedMissao.value}/AI/${selectedTalhao.value}`)
+    result = await axios.get(`http://localhost:8080/result/${selectedMissao.value}/AI/${selectedTalhao.value}?token=${token}`)
     resultFrom.value = 'ai'
   }
 	features.value = result.data.daninhasDTO.features
 }
 
 const fetchMissaoList = async () => {
-  const result = await axios.get('http://localhost:8080/missao/all')
+  const result = await axios.get(`http://localhost:8080/missao/all?token=${token}`)
   missaoList.value = result.data
 }
 
@@ -124,9 +163,9 @@ const saveMissao = async () => {
     if(!featureList) {
       let result
       try {
-        result = await axios.get(`http://localhost:8080/result/${selectedMissao.value}/QA/${id}`)
+        result = await axios.get(`http://localhost:8080/result/${selectedMissao.value}/QA/${id}?token=${token}`)
       } catch {
-        result = await axios.get(`http://localhost:8080/result/${selectedMissao.value}/AI/${id}`)
+        result = await axios.get(`http://localhost:8080/result/${selectedMissao.value}/AI/${id}?token=${token}`)
       }
       featureList = result.data.daninhasDTO.features
     }
@@ -144,7 +183,7 @@ const saveMissao = async () => {
   data.append('missao_id', selectedMissao.value?.toString() ?? '')
   data.append('file', file)
 
-  await axios.post('http://localhost:8080/result/qa', data, {
+  await axios.post(`http://localhost:8080/result/qa?token=${token}`, data, {
     headers: { "Content-Type": "multipart/form-data" }
   })
   

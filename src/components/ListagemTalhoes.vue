@@ -72,6 +72,7 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import router from '../router/index';
 import axios from 'axios';
+import { useAppStore } from '@/stores/app';
 
 const talhoes = ref([]);
 const loading = ref(false);
@@ -83,10 +84,12 @@ const totalTalhoes = ref(0);
 
 const totalPaginas = computed(() => Math.ceil(totalTalhoes.value / itensPorPagina.value));
 
+const store = useAppStore()
+
 async function buscarTalhoes(paginaZeroBased = 0, tamanho = 5) {
   loading.value = true;
   try {
-    const response = await axios.get(`http://localhost:8080/talhao/listar/${paginaZeroBased}/${tamanho}`);
+    const response = await axios.get(`http://localhost:8080/talhao/listar/${paginaZeroBased}/${tamanho}?token=${store.token}`);
     talhoes.value = response.data.content || [];
     totalTalhoes.value = response.data.totalElements || 0;
   } catch (error) {

@@ -51,6 +51,7 @@
 import { reactive, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useAppStore } from '@/stores/app'
 
 const router = useRouter()
 const form = ref(null)
@@ -80,9 +81,11 @@ const submitForm = async () => {
     password: state.senha,
     role: state.select,
   }
-
+  
+  const store = useAppStore()
+  
   try {
-    await axios.post('http://localhost:8080/usuario/cadastrar', body)
+    await axios.post(`http://localhost:8080/usuario/cadastrar?token=${store.token}`, body)
     router.push('/usuario/')
   } catch (error) {
     console.error('Erro ao cadastrar:', error)
