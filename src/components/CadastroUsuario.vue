@@ -77,7 +77,7 @@ const submitForm = async () => {
   const body = {
     nome: state.nome,
     email: state.email,
-    senha: state.senha,
+    password: state.senha,
     role: state.select,
   }
 
