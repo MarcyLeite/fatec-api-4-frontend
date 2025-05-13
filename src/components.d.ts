@@ -16,6 +16,7 @@ declare module 'vue' {
     Footer: typeof import('./components/Footer.vue')['default']
     ListagemFazendas: typeof import('./components/ListagemFazendas.vue')['default']
     ListagemTalhoes: typeof import('./components/ListagemTalhoes.vue')['default']
+    ListagemUsuarios: typeof import('./components/ListagemUsuarios.vue')['default']
     ModalEdicaoFazenda: typeof import('./components/ModalEdicaoFazenda.vue')['default']
     ModalEdicaoUsuario: typeof import('./components/ModalEdicaoUsuario.vue')['default']
     Navbar: typeof import('./components/Navbar.vue')['default']

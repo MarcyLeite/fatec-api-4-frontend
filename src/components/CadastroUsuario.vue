@@ -24,6 +24,7 @@
         :counter="10"
         :rules="rules.senha"
         label="Senha"
+        type="password"
         required
       ></v-text-field>
 
@@ -76,7 +77,7 @@ const submitForm = async () => {
   const body = {
     nome: state.nome,
     email: state.email,
-    senha: state.senha,
+    password: state.senha,
     role: state.select,
   }
 
