@@ -12,15 +12,21 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { useAppStore } from '@/stores/app'
 import ListagemUsuarios from '@/components/ListagemUsuarios.vue'
 
 const router = useRouter()
+const store = useAppStore()
 const usuarios = ref([])
 
 function irParaCadastro() {
   router.push('/usuario/cadastrar')
 }
+
+onMounted(async () => {
+  await store.verify()
+})
 </script>
