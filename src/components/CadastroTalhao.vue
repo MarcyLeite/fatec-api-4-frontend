@@ -52,6 +52,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import { useAppStore } from "@/stores/app";
 
 const fazendas = ref([]);
 const selectedFazenda = ref(null);
@@ -62,10 +63,12 @@ const loading = ref(false);
 const loadingFazendas = ref(false);
 const snackbar = ref({ show: false, message: "", color: "success" });
 
+const store = useAppStore()
+
 async function buscarFazendas() {
   loadingFazendas.value = true;
   try {
-    const response = await axios.get("http://localhost:8080/fazenda/listar");
+    const response = await axios.get(`http://localhost:8080/fazenda/listar?token=${store.token}`);
     fazendas.value = response.data.map(fazenda => ({
       id: fazenda.id,
       nome: fazenda.nome
@@ -89,7 +92,7 @@ async function enviarTalhao() {
   formData.append("file", geoJsonFile.value);
 
   try {
-    const response = await axios.post("http://localhost:8080/talhao", formData, {
+    const response = await axios.post(`http://localhost:8080/talhao?token=${store.token}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 

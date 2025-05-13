@@ -47,6 +47,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import ModalEdicaoFazenda from "./ModalEdicaoFazenda.vue";
+import { useAppStore } from "@/stores/app";
 
 const abrirModal = ref(false);
 const fazendaSelecionada = ref(null);
@@ -74,12 +75,14 @@ const itensPorPagina = ref(5);
 const totalFazendas = ref(0);
 const loading = ref(true);
 
+const store = useAppStore()
+
 async function buscarFazenda(page = 0, size = itensPorPagina.value) {
   loading.value = true;
 
   try {
     const response = await axios.get(
-      `http://localhost:8080/fazenda/listar/${page}/${size}`
+      `http://localhost:8080/fazenda/listar/${page}/${size}?token=${store.token}`
     );
     fazendas.value = response.data.content || [];
     totalFazendas.value = response.data.totalElements || 0;

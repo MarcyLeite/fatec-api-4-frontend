@@ -47,6 +47,7 @@
   <script setup>
   import { ref, onMounted } from "vue";
   import axios from "axios";
+import { useAppStore } from "@/stores/app";
   
   const abrirModal = ref(false);
   const usuarioSelecionado = ref(null);
@@ -74,12 +75,14 @@
   const totalUsuarios = ref(0);
   const loading = ref(true);
   
+  const store = useAppStore()
+
   async function buscarUsuario(page = 0, size = itensPorPagina.value) {
     loading.value = true;
   
     try {
       const response = await axios.get(
-        `http://localhost:8080/usuario/listar/${page}/${size}`
+        `http://localhost:8080/usuario/listar/${page}/${size}?token=${store.token}`
       );
       usuarios.value = response.data.content || [];
       totalUsuarios.value = response.data.totalElements || 0;
