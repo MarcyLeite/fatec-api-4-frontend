@@ -21,7 +21,6 @@
 <script setup>
 import { ref } from 'vue'
 import { useAppStore } from '@/stores/app'
-import ModalEdicaoUsuario from '@/components/ModalEdicaoUsuario.vue'
 
 const modalAberto = ref(false)
 const usuarioSelecionado = ref(null)
