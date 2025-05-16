@@ -12,7 +12,6 @@
 
           <v-btn class="mt-2" type="submit" block color="deep-purple-darken-1">Salvar</v-btn>
           <v-btn class="mt-2" block color="deep-purple-lighten-3" @click="cancelarEdicao">Cancelar</v-btn>
-          <v-btn class="mt-2" block color="red-darken-1" @click="deletarUsuario">Deletar</v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -27,7 +26,7 @@ const props = defineProps({
   usuario: Object
 })
 
-const emit = defineEmits(['atualizou', 'update:abrir', 'close', 'deletou'])
+const emit = defineEmits(['atualizou', 'update:abrir', 'close'])
 
 const dialog = ref(false)
 const usuarioEdit = ref({})
@@ -47,7 +46,7 @@ watch(dialog, (val) => {
 })
 
 async function salvarEdicao() {
-  if (!usuarioEdit.value.password || usuarioEdit.value.password.trim() === '') {
+  if (!usuarioEdit.value.password) {
     delete usuarioEdit.value.password; 
   }
 
@@ -69,30 +68,6 @@ async function salvarEdicao() {
     }
   } catch (err) {
     console.error('Erro ao salvar usuário:', err);
-  }
-}
-
-const deletarUsuario = async () => {
-  try {
-    const usuarioParaDeletar = { ...usuarioEdit.value, ativo: false }
-
-    const response = await fetch(`http://localhost:8080/usuario/editar/${usuarioParaDeletar.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(usuarioParaDeletar),
-    });
-
-    if (response.ok) {
-      emit('deletou', usuarioEdit.value.id)
-      dialog.value = false
-    } else {
-      const errorData = await response.json()
-      console.error('Erro ao deletar usuário:', errorData)
-    }
-  } catch (err) {
-    console.error('Erro ao deletar usuário:', err)
   }
 }
 
