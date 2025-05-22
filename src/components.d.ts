@@ -18,6 +18,7 @@ declare module 'vue' {
     ListagemTalhoes: typeof import('./components/ListagemTalhoes.vue')['default']
     ListagemUsuarios: typeof import('./components/ListagemUsuarios.vue')['default']
     ModalEdicaoFazenda: typeof import('./components/ModalEdicaoFazenda.vue')['default']
+    ModalEdicaoUsuario: typeof import('./components/ModalEdicaoUsuario.vue')['default']
     Navbar: typeof import('./components/Navbar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
