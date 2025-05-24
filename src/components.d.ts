@@ -11,6 +11,7 @@ declare module 'vue' {
     CadastroResultado: typeof import('./components/CadastroResultado.vue')['default']
     CadastroTalhao: typeof import('./components/CadastroTalhao.vue')['default']
     CadastroUsuario: typeof import('./components/CadastroUsuario.vue')['default']
+    Dashboard: typeof import('./components/dashboard.vue')['default']
     EditarResultado: typeof import('./components/EditarResultado.vue')['default']
     EditToolbar: typeof import('./components/EditToolbar.vue')['default']
     Footer: typeof import('./components/Footer.vue')['default']
