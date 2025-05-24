@@ -97,6 +97,15 @@
           <v-list-item-title>Resultado</v-list-item-title>
         </v-list-content>
       </v-list-item>
+            <v-list-item
+        v-if="['Administrador'].includes(store.role ?? '')"
+        link
+        href="/dashboard"
+      >
+        <v-list-content>
+          <v-list-item-title>dashboard</v-list-item-title>
+        </v-list-content>
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
