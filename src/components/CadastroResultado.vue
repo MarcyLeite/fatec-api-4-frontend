@@ -62,6 +62,7 @@
 <script setup>
 import { ref, watch, onMounted } from "vue";
 import axios from "axios";
+import { useAppStore } from "@/stores/app";
 
 const valid = ref(false);
 const loading = ref(false);
@@ -79,10 +80,12 @@ const loadingTalhoes = ref(false);
 
 const snackbar = ref({ show: false, message: "", color: "success" });
 
+const { token } = useAppStore()
+
 async function buscarFazendas() {
   loadingFazendas.value = true;
   try {
-    const { data } = await axios.get("http://localhost:8080/fazenda/listar");
+    const { data } = await axios.get(`http://localhost:8080/fazenda/listar?token=${token}`);
     fazendas.value = data.map(({ id, nome }) => ({ id, nome }));
   } catch (e) {
     mostrarSnackbar("Erro ao buscar fazendas", "error");
@@ -94,7 +97,7 @@ async function buscarFazendas() {
 async function buscarTalhoes(fazendaId) {
   loadingTalhoes.value = true;
   try {
-    const { data } = await axios.get(`http://localhost:8080/talhao/listar/${fazendaId}`);
+    const { data } = await axios.get(`http://localhost:8080/talhao/listar/${fazendaId}?token=${token}`);
     talhoes.value = data.map(({ id, nome }) => ({ id, nome }));
   } catch {
     mostrarSnackbar("Erro ao buscar talhões", "error");
@@ -116,7 +119,7 @@ async function enviarResultado() {
     formData.append("file", geoJsonFile.value);
 
     const response = await axios.post(
-      `http://localhost:8080/result/ai`,
+      `http://localhost:8080/result/ai?token=${token}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
     );
