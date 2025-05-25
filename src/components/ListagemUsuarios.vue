@@ -35,10 +35,10 @@
       </v-data-table-server>
     </v-container>
   
-    <modal-edicao-fazenda
-      v-if="usuarioSelecionado"
+    <modal-edicao-usuario
+      v-show="usuarioSelecionado"
       v-model:abrir="abrirModal"
-      :fazenda="usuarioSelecionado"
+      :usuario="usuarioSelecionado"
       @atualizou="carregarUsuarios({ page: 1, itemsPerPage: itensPorPagina })"
       @close="fecharModal"
     />
